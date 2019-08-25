@@ -60,6 +60,11 @@ abstract class BaseClient implements ClientInterface
      */
     protected $container = null;
 
+    public function __construct()
+    {
+        $this->setDiContainer();
+    }
+
     /**
      * @param $client
      * @param $year
@@ -105,7 +110,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getCache(): PredisCachePool
     {
-        return $this->cache = $this->cache ?? $this->getDIContainer()->get(PredisCachePool::class);
+        return $this->cache = $this->cache ?? $this->getDiContainer()->get(PredisCachePool::class);
     }
 
     /**
@@ -148,9 +153,17 @@ abstract class BaseClient implements ClientInterface
     /**
      * @return ContainerInterface|null
      */
-    public function getDIContainer()
+    public function setDiContainer()
     {
        return $this->container = $this->container ?? AppFactory::create()->getContainer();
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getDiContainer()
+    {
+       return $this->container;
     }
 
 }

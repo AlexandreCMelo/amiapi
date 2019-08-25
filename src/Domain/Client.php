@@ -8,7 +8,7 @@ use Ams\Domain\Client\Adapter\Spacex;
 use Ams\Domain\Client\Adapter\Xkcd;
 use Slim\Exception\HttpNotFoundException;
 
-class Client extends BaseDomain
+class Client
 {
     /**
      * Expected clients

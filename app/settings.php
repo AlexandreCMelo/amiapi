@@ -5,27 +5,28 @@ use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
-    //$redisConfig = $isDevEnviroment =
+    $dotenv = Dotenv\Dotenv::create('../');
+    $dotenv->load();
 
     $containerBuilder->addDefinitions([
         'settings' => [
             'redis' => [
                 'schema' => 'tcp',
-                'host' => 'amsapi-redis',
-                'port' => 6379,
+                'host' => getenv('REDIS_DEV_DOCKER_SERVICE_HOST'),
+                'port' => getenv('REDIS_DEV_DOCKER_SERVICE_PORT'),
             ],
             'redis_prod' => [
                 'schema' => 'tcp',
-                'host' => 'redis://h:p4e709c665e236aea3a0eafec990184f7d52c5e4a67c8b46bb918e98a4f5b2679@ec2-18-232-242-255.compute-1.amazonaws.com',
-                'port' => 29169,
+                'host' => getenv('REDIS_PROD_HOST'),
+                'port' => getenv('REDIS_PROD_PORT'),
             ],
-            'productionUri' => 'https://amsapi.herokuapp.com',
-            'isDevEnviroment' => false,
-            'displayErrorDetails' => true,
+            'productionUri' => getenv('PRODUCTION_HEROKU_URI'),
+            'isDevEnviroment' => getenv('ENVIROMENT_PRODUCTION'),
+            'displayErrorDetails' => (bool)getenv('SHOW_ERRORS'),
             'logger' => [
-                'name' => 'ams-logs',
-                'path' => __DIR__ . '/../logs/app.log',
-                'level' => Logger::INFO,
+                'name' => getenv('LOG_NAME'),
+                'path' => __DIR__ . '/'. getenv('LOG_PATH'),
+                'level' => getenv('LOG_LEVEL'),
             ],
         ],
     ]);
