@@ -10,9 +10,9 @@ matrix:
     env: ANALYSIS='true'
 
 before_script:
-- composer require php-coveralls/php-coveralls:^2.1.0
 - composer install -n
 
 script:
-#vendor/bin/phpunit --coverage-clover clover.xml ; fi
 
+after_success:
+vendor/bin/phpunit tests/Application/Actions/Client/.  ; fi
