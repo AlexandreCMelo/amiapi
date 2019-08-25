@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-die('a');
 use Ams\Application\Handlers\HttpErrorHandler;
 use Ams\Application\Handlers\ShutdownHandler;
 use Ams\Application\ResponseEmitter\ResponseEmitter;
@@ -30,7 +29,7 @@ function dd()
     }, func_get_args());
     die;
 }
-
+$isDevEnviroment = true;
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
