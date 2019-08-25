@@ -1,7 +1,5 @@
 language: php
-
 dist: trusty
-
 matrix:
   include:
     - php: 7.1
@@ -13,7 +11,7 @@ before_script:
   - composer install -n
 
 script:
-vendor/bin/phpunit --coverage-clover clover.xml ; fi
+vendor/bin/phpunit --coverage-clover clover.xml
 
 after_success:
-vendor/bin/php-coveralls --coverage_clover=clover.xml -v ; fi
+vendor/bin/php-coveralls --coverage_clover=clover.xml -v
