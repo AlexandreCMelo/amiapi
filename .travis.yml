@@ -11,8 +11,8 @@ matrix:
 
 
 before_script:
-- composer require php-coveralls/php-coveralls:^2.1.0
 - composer install -n
+- mv .env.local .env
 
 script:
 - vendor/bin/phpunit
