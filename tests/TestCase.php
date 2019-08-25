@@ -129,8 +129,8 @@ class TestCase extends PHPUnit_TestCase
 
     /**
      * @return string
+     * @throws Exception
      */
-
     function url(){
         $settings = $this->getAppInstance()->getContainer()->get('settings');
         $url = $settings['isDevEnviroment'] ? "http://" .$_SERVER['HTTP_HOST'] : $settings['productionUri'];

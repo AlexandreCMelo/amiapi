@@ -22,7 +22,6 @@
         "slim/slim": "^4.2"
     },
     "require-dev": {
-        "herloct/codeception-slim-module": "^1.1",
         "phpunit/phpunit": "^7.4"
     },
     "autoload": {
@@ -41,7 +40,6 @@
     },
     "scripts": {
         "start": "php -S localhost:8080 -t public",
-        "test": "phpunit"
     },
     "extras":{
         "heroku":{
