@@ -46,10 +46,10 @@ class Xkcd extends BaseClient implements ClientInterface
         $foundYearDataSet = $this->getCache()->get($this->foundAllPostsFromYearCacheKey($year)) ?? false;
 
         if ($foundYearDataSet) {
-            $posts = $this->getFromCache($cachedPosts, $limit);
+            $posts = $this->slicePosts($cachedPosts, $limit);
         } else {
             $posts = $limit <= count($cachedPosts) ?
-                $this->getFromCache($cachedPosts, $limit) :
+                $this->slicePosts($cachedPosts, $limit) :
                 $this->requestAsyncPosts(
                     $this->findPostInYear(self::SEARCH_OFFSET, $year),
                     $year,
@@ -251,7 +251,7 @@ class Xkcd extends BaseClient implements ClientInterface
      * @param $limit
      * @return array
      */
-    protected function getFromCache($cachedPosts, $limit): array
+    protected function slicePosts($cachedPosts, $limit): array
     {
         return array_slice($cachedPosts, 0, $limit);
     }

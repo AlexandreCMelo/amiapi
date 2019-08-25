@@ -7,10 +7,13 @@ use Ams\Application\Actions\Action;
 use Ams\Domain\Client as ClientDomain;
 use Cache\Adapter\Predis\PredisCachePool;
 use DateTime;
+use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
+use Psr\Container\ContainerInterface;
+use Slim\Factory\AppFactory;
 
 class Get extends Action
 {

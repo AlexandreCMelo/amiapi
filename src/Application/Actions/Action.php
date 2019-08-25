@@ -126,10 +126,6 @@ abstract class Action
              * @var BaseDomain $domain
              */
             $domain = new $domainClass();
-            $domain->setCache($this->cache)
-                ->setLogger($this->logger)
-                ->setRequest($this->request);
-
             $this->domain = $domain;
         }
 

@@ -7,8 +7,10 @@ use Buzz\Client\Curl as Psr18HttpClient;
 use Buzz\Client\MultiCurl as Psr18HttpMultiClient;
 use Cache\Adapter\Predis\PredisCachePool;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Factory\AppFactory;
 
 /**
  * Class BaseClient
@@ -39,11 +41,6 @@ abstract class BaseClient implements ClientInterface
     protected $cache;
 
     /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * @var Psr17Factory
      */
     protected $requestFactory = null;
@@ -59,9 +56,9 @@ abstract class BaseClient implements ClientInterface
     protected $httpMultiClient = null;
 
     /**
-     * @var ServerRequestInterface
+     * @var ContainerInterface
      */
-    protected $request = null;
+    protected $container = null;
 
     /**
      * @param $client
@@ -108,15 +105,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getCache(): PredisCachePool
     {
-        return $this->cache ?? (New PredisCachePool);
-    }
-
-    /**
-     * @param PredisCachePool $cache
-     */
-    public function setCache(PredisCachePool $cache)
-    {
-        $this->cache = $cache;
+        return $this->cache = $this->cache ?? $this->getDIContainer()->get(PredisCachePool::class);
     }
 
     /**
@@ -124,7 +113,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getRequestFactory(): Psr17Factory
     {
-        return $this->requestFactory ?? (New Psr17Factory);
+        return $this->requestFactory = $this->requestFactory ?? (New Psr17Factory);
     }
 
     /**
@@ -133,7 +122,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getHttpClient(Psr17Factory $psr17Factory): Psr18HttpClient
     {
-        return $this->httpClient ?? (New Psr18HttpClient($psr17Factory));
+        return $this->httpClient = $this->httpClient ?? (New Psr18HttpClient($psr17Factory));
     }
 
 
@@ -143,39 +132,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getHttpMultiClient(Psr17Factory $psr17Factory): Psr18HttpMultiClient
     {
-        return $this->httpMultiClient ?? (New Psr18HttpMultiClient($psr17Factory));
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        return $this->logger;
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-
-    /**
-     * @return ServerRequestInterface
-     */
-    public function getRequest(): ServerRequestInterface
-    {
-        return $this->request;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     */
-    public function setRequest($request): void
-    {
-        $this->request = $request;
+        return $this->httpMultiClient = $this->httpMultiClient ?? (New Psr18HttpMultiClient($psr17Factory));
     }
 
     /**
@@ -188,5 +145,12 @@ abstract class BaseClient implements ClientInterface
         return implode([$client, $year], '-');
     }
 
+    /**
+     * @return ContainerInterface|null
+     */
+    public function getDIContainer()
+    {
+       return $this->container = $this->container ?? AppFactory::create()->getContainer();
+    }
 
 }

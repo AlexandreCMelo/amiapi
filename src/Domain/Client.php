@@ -51,8 +51,6 @@ class Client extends BaseDomain
     {
         $this->validateClient($source);
         $client = New $this->clients[$source];
-        $client->setCache($this->getCache());
-        $client->setLogger($this->getLogger());
 
         return $client;
     }

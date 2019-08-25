@@ -12,6 +12,17 @@ ini_set("error_log",__DIR__ . '/../logs/app.log');
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/**
+ *
+ */
+function dd()
+{
+    array_map(function($x) {
+        var_dump($x);
+    }, func_get_args());
+    die;
+}
+
 $containerBuilder = new ContainerBuilder();
 //$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 
@@ -22,14 +33,7 @@ $dependencies = require __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
 
 $container = $containerBuilder->build();
-function dd()
-{
-    array_map(function($x) {
-        var_dump($x);
-    }, func_get_args());
-    die;
-}
-$isDevEnviroment = true;
+
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();

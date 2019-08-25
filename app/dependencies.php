@@ -32,6 +32,7 @@ return function (ContainerBuilder $containerBuilder) {
             $redisSettings = $settings['isDevEnviroment'] ? $settings['redis'] : $settings['redis_prod'] ;
             $host = $redisSettings['host'].':'.$redisSettings['port'];
             $client = new \Predis\Client($host);
+
             $pool = new Cache\Adapter\Predis\PredisCachePool($client);
 
             return $pool;

@@ -11,7 +11,7 @@ return function (ContainerBuilder $containerBuilder) {
         'settings' => [
             'redis' => [
                 'schema' => 'tcp',
-                'host' => 'localhost',
+                'host' => 'amsapi-redis',
                 'port' => 6379,
             ],
             'redis_prod' => [
