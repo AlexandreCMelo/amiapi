@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+die('a');
 use Ams\Application\Handlers\HttpErrorHandler;
 use Ams\Application\Handlers\ShutdownHandler;
 use Ams\Application\ResponseEmitter\ResponseEmitter;
