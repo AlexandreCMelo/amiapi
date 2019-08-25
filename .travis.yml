@@ -7,14 +7,13 @@ matrix:
     - php: 7.1
     - php: 7.2
     - php: 7.3
-      env: ANALYSIS='true'
 
 before_script:
   - composer require php-coveralls/php-coveralls:^2.1.0
   - composer install -n
 
 script:
-  - if [[ "$ANALYSIS" == 'true' ]]; then vendor/bin/phpunit --coverage-clover clover.xml ; fi
+vendor/bin/phpunit --coverage-clover clover.xml ; fi
 
 after_success:
-  - if [[ "$ANALYSIS" == 'true' ]]; then vendor/bin/php-coveralls --coverage_clover=clover.xml -v ; fi
+vendor/bin/php-coveralls --coverage_clover=clover.xml -v ; fi
