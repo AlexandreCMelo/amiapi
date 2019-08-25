@@ -30,7 +30,6 @@ return function (ContainerBuilder $containerBuilder) {
         Cache\Adapter\Predis\PredisCachePool::class => function (ContainerInterface $c) {
             $settings = $c->get('settings');
             $redisSettings = $settings['isDevEnviroment'] ? $settings['redis'] : $settings['redis_prod'] ;
-            dd($redisSettings);
             $host = $redisSettings['schema'].':/'.$redisSettings['host'].':'.$redisSettings['port'];
             $client = new \Predis\Client('amsapi-redis:6379');
             $pool = new Cache\Adapter\Predis\PredisCachePool($client);
