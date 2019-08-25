@@ -24,10 +24,9 @@ class Client extends BaseDomain
      * @param string $source
      * @param $year
      * @param int $limit
-     * @return array
      * @throws HttpNotFoundException
      */
-    public function request(string $source, int $year, int $limit): array
+    public function request(string $source, int $year, int $limit)
     {
         return $this->getClientAdapter($source)->request($year, $limit);
     }

@@ -3,19 +3,39 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Buzz\Client\Curl as Psr18HttpClient;
+use Buzz\Client\MultiCurl as Psr18HttpMultiClient;
 use DI\ContainerBuilder;
 use Exception;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Factory\AppFactory;
-use Slim\Psr7\Factory\StreamFactory;
-use Slim\Psr7\Headers;
-use Slim\Psr7\Request as SlimRequest;
-use Slim\Psr7\Uri;
+
 
 class TestCase extends PHPUnit_TestCase
 {
+
+    const HTTP_SUCCESS_CODE = 200;
+    const HTTP_NOT_FOUND = 404;
+    /**
+     * @var Psr17Factory
+     */
+    protected $requestFactory = null;
+
+    /**
+     * @var Psr18HttpClient
+     */
+    protected $httpClient = null;
+
+    /**
+     * @var Psr18HttpMultiClient
+     */
+    protected $httpMultiClient = null;
+
     /**
      * @return App
      * @throws Exception
@@ -35,20 +55,12 @@ class TestCase extends PHPUnit_TestCase
         $dependencies = require __DIR__ . '/../app/dependencies.php';
         $dependencies($containerBuilder);
 
-        // Set up repositories
-        $repositories = require __DIR__ . '/../app/repositories.php';
-        $repositories($containerBuilder);
-
         // Build PHP-DI Container instance
         $container = $containerBuilder->build();
 
         // Instantiate the app
         AppFactory::setContainer($container);
         $app = AppFactory::create();
-
-        // Register middleware
-        $middleware = require __DIR__ . '/../app/middleware.php';
-        $middleware($app);
 
         // Register routes
         $routes = require __DIR__ . '/../app/routes.php';
@@ -60,27 +72,71 @@ class TestCase extends PHPUnit_TestCase
     /**
      * @param string $method
      * @param string $path
-     * @param array  $headers
-     * @param array  $serverParams
-     * @param array  $cookies
-     * @return Request
+     * @return ResponseInterface
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     protected function createRequest(
         string $method,
-        string $path,
-        array $headers = ['HTTP_ACCEPT' => 'application/json'],
-        array $serverParams = [],
-        array $cookies = []
-    ): Request {
-        $uri = new Uri('', '', 80, $path);
-        $handle = fopen('php://temp', 'w+');
-        $stream = (new StreamFactory())->createStreamFromResource($handle);
+        string $path
+    ): ResponseInterface
+    {
+        $requestFactory = $this->getRequestFactory();
 
-        $h = new Headers();
-        foreach ($headers as $name => $value) {
-            $h->addHeader($name, $value);
+        $request = $requestFactory->createRequest(
+            $method,
+            $this->url().$path
+        );
+
+        $response = $this->getHttpClient($requestFactory)->sendRequest($request);
+
+        return $response;
+    }
+
+
+    /**
+     * @param Psr17Factory $psr17Factory
+     * @return Psr18HttpClient
+     */
+    public function getHttpClient(Psr17Factory $psr17Factory): Psr18HttpClient
+    {
+        return $this->httpClient ?? (New Psr18HttpClient($psr17Factory));
+    }
+
+    /**
+     * @return Psr17Factory
+     */
+    public function getRequestFactory(): Psr17Factory
+    {
+        return $this->requestFactory ?? (New Psr17Factory);
+    }
+
+    /**
+     * @param Psr17Factory $psr17Factory
+     * @return Psr18HttpMultiClient
+     */
+    public function getHttpMultiClient(Psr17Factory $psr17Factory): Psr18HttpMultiClient
+    {
+        return $this->httpMultiClient ?? (New Psr18HttpMultiClient($psr17Factory));
+    }
+
+    /**
+     * @param $message
+     */
+    public function writeMessage(?string $message)
+    {
+        fwrite(STDERR, print_r($message.PHP_EOL, TRUE));
+    }
+
+    /**
+     * @return string
+     */
+    function url(){
+        if(isset($_SERVER['HTTPS'])){
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
         }
-
-        return new SlimRequest($method, $uri, $h, $serverParams, $cookies, $stream);
+        else{
+            $protocol = 'http';
+        }
+        return $protocol . "://" . $_SERVER['HTTP_HOST'];
     }
 }

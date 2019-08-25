@@ -17,22 +17,21 @@ class Spacex Extends BaseClient
     const CACHE_MISSIONS = 'missions';
     const NOT_FOUND_YEAR_ERROR_MESSAGE = 'No missions';
 
+
     /**
      * @param int $year
      * @param int $limit
-     * @return array
+     * @return 0|array|bool
      * @throws ClientExceptionInterface
-     * @throws HttpNotFoundException
      * @throws InvalidArgumentException
-     * @throws Exception
      */
-    public function request(int $year, int $limit): array
+    public function request(int $year, int $limit)
     {
         $launches = $this->getCachedMissions() ?? $this->requestMissionsJsonFromApi();
         $missions = $this->getCache()->get(self::CACHE_MISSIONS) ?? $this->assembleMissions($launches);
 
         if (empty($missions[$year])) {
-            throw New HttpNotFoundException($this->getRequest(), self::NOT_FOUND_YEAR_ERROR_MESSAGE);
+            return false;
         }
 
         $data = array_slice($missions[$year], 0, $limit);

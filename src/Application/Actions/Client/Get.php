@@ -47,6 +47,10 @@ class Get extends Action
 
         $response = $this->getClientDomain()->request($sourceId, (int)$year, $limit);
 
+        if(!$response){
+            throw New HttpNotFoundException($this->request);
+        }
+
         return $this->respond($response);
     }
 
