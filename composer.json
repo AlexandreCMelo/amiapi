@@ -1,6 +1,6 @@
 {
     "name": "alexandrecmelo/amiapi",
-    "description": "SpaceX Xkcd api navigator",
+    "description": "SpaceX XKCD api navigator",
     "keywords": ["slim4", "php", "psr15", "psr7", "psr18"],
     "authors": [
         {
