@@ -1,0 +1,32 @@
+version: '3.7'
+
+volumes:
+    logs:
+        driver: local
+
+services:
+    ams-app:
+        image: php:7-alpine
+        working_dir: /var/www
+        command: php -S 0.0.0.0:8080 -t public
+        environment:
+            docker: "true"
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/var/www
+            - logs:/var/www/logs
+        networks:
+            - amsapi-network
+    amsapi-redis:
+        image: redis:5.0.5
+        ports:
+            - "6379:6379"
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        networks:
+            - amsapi-network
+networks:
+    amsapi-network:
+        driver: bridge
+

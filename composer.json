@@ -1,0 +1,45 @@
+{
+    "name": "AlexandreCMelo/amsapp",
+    "description": "SpaceX Xkcd api navigator",
+    "keywords": ["slim4", "php", "psr15", "psr7", "psr18"],
+    "authors": [
+        {
+            "name": "Alexandre Melo",
+            "email": "alexandre.carvalho.melo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "slim/slim": "^4.2",
+        "cache/predis-adapter": "^1.0",
+        "monolog/monolog": "^1.24",
+        "nyholm/psr7": "^1.1",
+        "nyholm/psr7-server": "^0.3.0",
+        "php-di/php-di": "^6.0",
+        "predis/predis": "^1.1",
+        "kriswallsmith/buzz": "^1.0"
+    },
+    "require-dev": {
+        "herloct/codeception-slim-module": "^1.1",
+        "phpunit/phpunit": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ams\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "scripts": {
+        "start": "php -S localhost:8080 -t public",
+        "test": "phpunit"
+    }
+}
