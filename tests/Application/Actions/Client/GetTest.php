@@ -209,13 +209,12 @@ class GetTest extends TestCase
             ]
         );
 
-        /*
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
-        $this->writeMessage('Testing invalid client '. $url);
+        $this->writeMessage('Testing year with spacex '. $url);
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
-        */
+
     }
 
     /**
@@ -243,12 +242,12 @@ class GetTest extends TestCase
             ]
         );
 
-        /*
+
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
-        $this->writeMessage('Testing invalid client '. $url);
+        $this->writeMessage('Testing year with xkcd '. $url);
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
-        */
+
     }
 }
