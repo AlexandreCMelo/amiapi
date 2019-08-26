@@ -6,6 +6,9 @@ namespace Ams\Domain;
 use Ams\Domain\Client\Adapter\ClientInterface;
 use Ams\Domain\Client\Adapter\Spacex;
 use Ams\Domain\Client\Adapter\Xkcd;
+use Ams\Domain\DomainException\DomainRecordNotFoundException;
+use http\Exception\BadUrlException;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
 class Client
@@ -23,9 +26,10 @@ class Client
 
     /**
      * @param string $source
-     * @param $year
-     * @param int    $limit
-     * @throws HttpNotFoundException
+     * @param int $year
+     * @param int $limit
+     * @return mixed
+     * @throws DomainRecordNotFoundException
      */
     public function request(string $source, int $year, int $limit)
     {
@@ -34,19 +38,22 @@ class Client
 
     /**
      * @param string $source
-     * @throws HttpNotFoundException
+     * @return bool
+     * @throws DomainRecordNotFoundException
      */
-    public function validateClient(string $source): void
+    public function validateClient(string $source)
     {
-        if (empty($this->clients[$source])) {
-            throw new \DomainException('Not found');
+        if (isset($this->clients[$source])) {
+            return true;
         }
+
+        throw new DomainRecordNotFoundException('Not found.');
     }
 
     /**
      * @param string $source
      * @return ClientInterface
-     * @throws HttpNotFoundException
+     * @throws DomainRecordNotFoundException
      */
     public function getClientAdapter(string $source): ClientInterface
     {

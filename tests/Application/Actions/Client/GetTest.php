@@ -7,6 +7,7 @@ use Ams\Domain\Client\Adapter\Spacex;
 use Ams\Domain\Client\Adapter\Xkcd;
 use Cache\Adapter\Predis\PredisCachePool;
 use DI\Container;
+use Exception;
 use Tests\TestCase;
 
 class GetTest extends TestCase
@@ -67,7 +68,7 @@ class GetTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testingSpaceXInvalidEndpoint()
     {
@@ -106,6 +107,7 @@ class GetTest extends TestCase
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
         }
     }
+
     public function testingXkcdEndPoint()
     {
 
@@ -151,44 +153,34 @@ class GetTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
-    public function testingXkcdInvalidEndpoint()
+    public function testingInvalidDomains()
     {
 
         $testingConstrains = [
-            [
-                'year' => '20018',
-                'limit' => 'an_invalid_limit',
-            ],
-            [
-                'year' => '1000',
-                'limit' => '10',
-            ],
-            [
-                'year' => 'an_invalid_year',
-                'limit' => '21',
-            ]
+            'client' => 'invalidus',
+            'year' => '2009',
+            'limit' => '10',
         ];
 
         $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
-        foreach ($testingConstrains as $testingConstrain) {
-            $url = vsprintf(
-                $urlPattern,
-                [
-                    Xkcd::PARAM_CLIENT_KEY,
-                    $testingConstrain['year'],
-                    $testingConstrain['limit']
-                ]
-            );
 
-            $response = $this->createRequest('GET', $url);
-            $responseBodyJson = json_decode($response->getBody()->getContents());
+        $url = vsprintf(
+            $urlPattern,
+            [
+                $testingConstrains['client'],
+                $testingConstrains['year'],
+                $testingConstrains['limit']
+            ]
+        );
 
-            $this->writeMessage($url);
-            $this->writeMessage('Testing invalid endpoint ' . $url . ' should return 404');
-            $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
-            $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
-        }
+
+        $response = $this->createRequest('GET', $url);
+        $responseBodyJson = json_decode($response->getBody()->getContents());
+
+        $this->writeMessage('Testing invalid client '. $url);
+        $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
 }
