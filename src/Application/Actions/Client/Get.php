@@ -6,6 +6,7 @@ namespace Ams\Application\Actions\Client;
 use Ams\Application\Actions\Action;
 use Ams\Domain\Client as ClientDomain;
 use Cache\Adapter\Predis\PredisCachePool;
+use DateInterval;
 use DateTime;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -65,7 +66,9 @@ class Get extends Action
      */
     protected function validateYear($year)
     {
-        return DateTime::createFromFormat('Y', $year);
+        $nextYear = new DateTime();
+        $nextYear->add(new DateInterval('P1Y'));
+        return $year < $nextYear->format('Y') && DateTime::createFromFormat('Y', $year);
     }
 
     /**

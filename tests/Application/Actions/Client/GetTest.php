@@ -183,4 +183,72 @@ class GetTest extends TestCase
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
+
+    /**
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function testingNonExistentYearSpaceX()
+    {
+        $nextYear = new \DateTime();
+        $nextYear->add(new \DateInterval('P1Y'));
+
+        $testingConstrains = [
+            'client' => 'space',
+            'year' =>  $nextYear->format('Y'),
+            'limit' => '10',
+        ];
+
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
+
+        $url = vsprintf(
+            $urlPattern,
+            [
+                $testingConstrains['client'],
+                $testingConstrains['year'],
+                $testingConstrains['limit']
+            ]
+        );
+
+        /*
+        $response = $this->createRequest('GET', $url);
+        $responseBodyJson = json_decode($response->getBody()->getContents());
+        $this->writeMessage('Testing invalid client '. $url);
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
+        */
+    }
+
+    /**
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function testingNonExistentYearXkcd()
+    {
+        $nextYear = new \DateTime();
+        $nextYear->add(new \DateInterval('P1Y'));
+
+        $testingConstrains = [
+            'client' => 'space',
+            'year' =>  $nextYear->format('Y'),
+            'limit' => '10',
+        ];
+
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
+
+        $url = vsprintf(
+            $urlPattern,
+            [
+                $testingConstrains['client'],
+                $testingConstrains['year'],
+                $testingConstrains['limit']
+            ]
+        );
+
+        /*
+        $response = $this->createRequest('GET', $url);
+        $responseBodyJson = json_decode($response->getBody()->getContents());
+        $this->writeMessage('Testing invalid client '. $url);
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
+        */
+    }
 }
