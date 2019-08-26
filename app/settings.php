@@ -19,8 +19,9 @@ return function (ContainerBuilder $containerBuilder) {
                 'port' => getenv('REDIS_PROD_PORT'),
             ],
             'productionUri' => getenv('PRODUCTION_HEROKU_URI'),
-            'isDevEnviroment' => getenv('ENVIROMENT_PRODUCTION'),
-            'displayErrorDetails' => (bool)getenv('SHOW_ERRORS'),
+            'isDevEnviroment' => getenv('ENVIROMENT_DEVELOPMENT') === 'true'? true: false,
+            'displayErrorDetails' => getenv('SHOW_ERRORS') === 'true'? true: false
+,
             'logger' => [
                 'name' => getenv('LOG_NAME'),
                 'path' => __DIR__ . '/'. getenv('LOG_PATH'),

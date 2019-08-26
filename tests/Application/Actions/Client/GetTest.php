@@ -43,12 +43,11 @@ class GetTest extends TestCase
             ],
         ];
 
+        dd($this->url());
         $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
 
             $url = vsprintf($urlPattern, [Spacex::PARAM_CLIENT_KEY, $testingConstrain['year'], $testingConstrain['limit']]);
-
-            $this->writeMessage($url);
 
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
