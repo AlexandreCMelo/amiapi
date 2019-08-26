@@ -24,6 +24,7 @@ class Xkcd extends BaseClient implements ClientInterface
     const SEARCH_OFFSET = 1000;
     const SEARCH_DIVISION_FACTOR = 2;
     const SEARCH_MULTIPLICATION_FACTOR = 1.2;
+    const MIN_YEAR = 2006;
 
     /**
      * @var RequestFactory
@@ -43,6 +44,10 @@ class Xkcd extends BaseClient implements ClientInterface
      */
     public function request(int $year, int $limit)
     {
+        if($year < self::MIN_YEAR){
+            return false;
+        }
+
         $cachedPosts = $this->getCachedPosts($year) ?? [];
         $foundYearDataSet = $this->getCache()->get($this->foundAllPostsFromYearCacheKey($year)) ?? false;
 
@@ -89,8 +94,13 @@ class Xkcd extends BaseClient implements ClientInterface
      * @return array
      * @throws InvalidArgumentException
      */
-    protected function requestAsyncPosts($postToSearchFrom, int $year, int $limit, array $cachedPosts): array
+    protected function requestAsyncPosts($postToSearchFrom, int $year, int $limit, array $cachedPosts)
     {
+
+        if(empty($postToSearchFrom)) {
+            return false;
+        }
+
         $posts = [];
         $onlyKeepSameYearCallback = function ($request, Response $response) use (&$posts, $year) {
             $post = json_decode($response->getBody()->getContents());

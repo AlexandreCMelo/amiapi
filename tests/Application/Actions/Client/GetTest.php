@@ -44,7 +44,7 @@ class GetTest extends TestCase
             ],
         ];
 
-        $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
             $url = vsprintf(
                 $urlPattern,
@@ -61,7 +61,7 @@ class GetTest extends TestCase
             $this->writeMessage('Testing endpoint ' . $url);
             $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), $url);
             $dataCount = count($responseBodyJson->meta->request->data);
-            $this->writeMessage('Testing result count should be ' .$testingConstrain['limit']. ' is '. $dataCount);
+            $this->writeMessage('Testing result count should be ' . $testingConstrain['limit'] . ' is ' . $dataCount);
             $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
         }
     }
@@ -87,7 +87,7 @@ class GetTest extends TestCase
             ]
         ];
 
-        $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
             $url = vsprintf(
                 $urlPattern,
@@ -101,7 +101,91 @@ class GetTest extends TestCase
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
-            $this->writeMessage('Testing invalid endpoint ' . $url. ' should return 404');
+            $this->writeMessage('Testing invalid endpoint ' . $url . ' should return 404');
+            $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+            $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
+        }
+    }
+    public function testingXkcdEndPoint()
+    {
+
+        $testingConstrains = [
+            [
+                'year' => 2008,
+                'limit' => 8,
+            ],
+            [
+                'year' => 2012,
+                'limit' => 2,
+            ],
+            [
+                'year' => 2017,
+                'limit' => 6,
+            ],
+            [
+                'year' => 2019,
+                'limit' => 20,
+            ],
+        ];
+
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
+        foreach ($testingConstrains as $testingConstrain) {
+            $url = vsprintf(
+                $urlPattern,
+                [
+                    Xkcd::PARAM_CLIENT_KEY,
+                    $testingConstrain['year'],
+                    $testingConstrain['limit']
+                ]
+            );
+
+            $response = $this->createRequest('GET', $url);
+            $responseBodyJson = json_decode($response->getBody()->getContents());
+
+            $this->writeMessage('Testing endpoint ' . $url);
+            $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), $url);
+            $dataCount = count($responseBodyJson->meta->request->data);
+            $this->writeMessage('Testing result count should be ' . $testingConstrain['limit'] . ' is ' . $dataCount);
+            $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testingXkcdInvalidEndpoint()
+    {
+
+        $testingConstrains = [
+            [
+                'year' => '20018',
+                'limit' => 'an_invalid_limit',
+            ],
+            [
+                'year' => '1000',
+                'limit' => '10',
+            ],
+            [
+                'year' => 'an_invalid_year',
+                'limit' => '21',
+            ]
+        ];
+
+        $urlPattern = $this->url() . '/api/client/%s/year/%d/limit/%d';
+        foreach ($testingConstrains as $testingConstrain) {
+            $url = vsprintf(
+                $urlPattern,
+                [
+                    Xkcd::PARAM_CLIENT_KEY,
+                    $testingConstrain['year'],
+                    $testingConstrain['limit']
+                ]
+            );
+
+            $response = $this->createRequest('GET', $url);
+            $responseBodyJson = json_decode($response->getBody()->getContents());
+
+            $this->writeMessage('Testing invalid endpoint ' . $url . ' should return 404');
             $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
         }
