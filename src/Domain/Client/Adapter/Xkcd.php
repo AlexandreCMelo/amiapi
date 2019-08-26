@@ -48,6 +48,7 @@ class Xkcd extends BaseClient implements ClientInterface
             return false;
         }
 
+
         $cachedPosts = $this->getCachedPosts($year) ?? [];
         $foundYearDataSet = $this->getCache()->get($this->foundAllPostsFromYearCacheKey($year)) ?? false;
 

@@ -39,7 +39,7 @@ class Client
     public function validateClient(string $source): void
     {
         if (empty($this->clients[$source])) {
-            throw new HttpNotFoundException($this->getRequest(), 'Client not found.');
+            throw new \DomainException('Not found');
         }
     }
 
