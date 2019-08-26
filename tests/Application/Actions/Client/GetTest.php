@@ -59,7 +59,7 @@ class GetTest extends TestCase
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
             $this->writeMessage('Testing endpoint ' . $url);
-            $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), 'teste');
+            $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), $url);
             $dataCount = count($responseBodyJson->meta->request->data);
             $this->writeMessage('Testing result count should be ' .$testingConstrain['limit']. ' is '. $dataCount);
             $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
