@@ -7,8 +7,6 @@ use Ams\Domain\Client\Adapter\ClientInterface;
 use Ams\Domain\Client\Adapter\Spacex;
 use Ams\Domain\Client\Adapter\Xkcd;
 use Ams\Domain\DomainException\DomainRecordNotFoundException;
-use http\Exception\BadUrlException;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpNotFoundException;
 
 class Client
