@@ -100,7 +100,7 @@ class Xkcd extends BaseClient implements ClientInterface
                     $post->year,
                     $post->title,
                     $post->img,
-                    $post->transcript
+                    empty($post->transcript) ? $post->alt : $post->transcript
                 );
             }
             return false;
