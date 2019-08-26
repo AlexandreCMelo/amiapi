@@ -185,6 +185,7 @@ class GetTest extends TestCase
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
+            $this->writeMessage($url);
             $this->writeMessage('Testing invalid endpoint ' . $url . ' should return 404');
             $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
