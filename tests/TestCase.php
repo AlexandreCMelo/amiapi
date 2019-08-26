@@ -19,6 +19,7 @@ class TestCase extends PHPUnit_TestCase
 {
 
     const HTTP_SUCCESS_CODE = 200;
+    const HTTP_NOTE_VALID_CODE = 400;
     const HTTP_NOT_FOUND = 404;
     /**
      * @var Psr17Factory
