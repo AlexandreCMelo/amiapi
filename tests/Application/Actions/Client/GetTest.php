@@ -181,6 +181,6 @@ class GetTest extends TestCase
 
         $this->writeMessage('Testing invalid client '. $url);
         $this->assertEquals(500, $response->getStatusCode());
-        $this->assertContains('SERVER_ERROR', $responseBodyJson->error->type);
+        $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
 }
