@@ -44,7 +44,7 @@ class Xkcd extends BaseClient implements ClientInterface
      */
     public function request(int $year, int $limit)
     {
-        if($year < self::MIN_YEAR){
+        if ($year < self::MIN_YEAR) {
             return false;
         }
 
@@ -97,7 +97,7 @@ class Xkcd extends BaseClient implements ClientInterface
     protected function requestAsyncPosts($postToSearchFrom, int $year, int $limit, array $cachedPosts)
     {
 
-        if(empty($postToSearchFrom)) {
+        if (empty($postToSearchFrom)) {
             return false;
         }
 

@@ -26,7 +26,8 @@ class XkcdTest extends TestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function testCanCallCacheClass(){
+    public function testCanCallCacheClass()
+    {
         $spaceClass = new Xkcd();
         $this->writeMessage('Testing can access cache class');
         $this->assertInstanceOf(PredisCachePool::class, $spaceClass->getCache());
@@ -36,7 +37,8 @@ class XkcdTest extends TestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function testCanCallHttpClientClass(){
+    public function testCanCallHttpClientClass()
+    {
         $spaceClass = new Xkcd();
         $this->writeMessage('Testing can access http class');
         $requestFactory = new Psr17Factory();
@@ -47,7 +49,8 @@ class XkcdTest extends TestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function testCanCallMultiHttpClientClass(){
+    public function testCanCallMultiHttpClientClass()
+    {
         $spaceClass = new Xkcd();
         $this->writeMessage('Testing can access multi http class');
         $requestFactory = new Psr17Factory();
@@ -58,7 +61,8 @@ class XkcdTest extends TestCase
      * @throws \Psr\Http\Client\ClientExceptionInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function testCanMakeRequest(){
+    public function testCanMakeRequest()
+    {
         $spaceClass = new Xkcd();
         $this->writeMessage('Testing can make a request');
         $requestFactory = new Psr17Factory();
@@ -81,8 +85,5 @@ class XkcdTest extends TestCase
         $this->assertObjectHasAttribute('date', $data);
         $this->assertObjectHasAttribute('link', $data);
         $this->assertObjectHasAttribute('details', $data);
-
     }
-
-
 }

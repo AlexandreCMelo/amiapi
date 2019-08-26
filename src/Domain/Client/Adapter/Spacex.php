@@ -16,13 +16,11 @@ class Spacex extends BaseClient
     const PARAM_URL = 'https://api.spacexdata.com/v2/launches';
     const CACHE_MISSIONS = 'missions';
 
-
     /**
      * @param int $year
      * @param int $limit
      * @return 0|array|bool
-     * @throws ClientExceptionInterface
-     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function request(int $year, int $limit)
     {
@@ -44,10 +42,9 @@ class Spacex extends BaseClient
 
         return $data;
     }
+
     /**
      * @return array
-     * @throws ClientExceptionInterface
-     * @throws InvalidArgumentException
      */
     protected function requestMissionsJsonFromApi(): array
     {
