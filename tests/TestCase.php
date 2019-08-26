@@ -84,8 +84,9 @@ class TestCase extends PHPUnit_TestCase
 
         $request = $requestFactory->createRequest(
             $method,
-            $this->url().$path
+            $path
         );
+
 
         $response = $this->getHttpClient($requestFactory)->sendRequest($request);
 

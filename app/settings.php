@@ -5,8 +5,6 @@ use DI\ContainerBuilder;
 use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
-    $dotenv = Dotenv\Dotenv::create('../');
-    $dotenv->load();
 
     $containerBuilder->addDefinitions([
         'settings' => [

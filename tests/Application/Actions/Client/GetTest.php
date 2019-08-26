@@ -23,16 +23,6 @@ class GetTest extends TestCase
 
     public function testing_spacex_get_endpoint()
     {
-        $app = $this->getAppInstance();
-
-        /** @var Container $container */
-        $container = $app->getContainer();
-
-        /**
-         * @var PredisCachePool
-         */
-        $cache = $container->get(PredisCachePool::class);
-
 
         $testingConstrains = [
             [
@@ -53,10 +43,12 @@ class GetTest extends TestCase
             ],
         ];
 
-        $urlPattern = '/api/client/%s/year/%d/limit/%d';
+        $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
 
             $url = vsprintf($urlPattern, [Spacex::PARAM_CLIENT_KEY, $testingConstrain['year'], $testingConstrain['limit']]);
+
+            $this->writeMessage($url);
 
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
@@ -90,7 +82,7 @@ class GetTest extends TestCase
             ]
         ];
 
-        $urlPattern = '/api/client/%s/year/%d/limit/%d';
+        $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
 
             $url = vsprintf($urlPattern, [Spacex::PARAM_CLIENT_KEY, $testingConstrain['year'], $testingConstrain['limit']]);
@@ -103,6 +95,5 @@ class GetTest extends TestCase
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
         }
     }
-
 
 }
