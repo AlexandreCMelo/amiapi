@@ -13,7 +13,6 @@ matrix:
 before_script:
 - composer install -n
 - mv .env.local .env
-- cat .env
 
 script:
 - vendor/bin/phpunit

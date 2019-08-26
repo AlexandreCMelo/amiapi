@@ -15,7 +15,6 @@ class Spacex Extends BaseClient
     const PARAM_CLIENT_KEY = 'space';
     const PARAM_URL = 'https://api.spacexdata.com/v2/launches';
     const CACHE_MISSIONS = 'missions';
-    const NOT_FOUND_YEAR_ERROR_MESSAGE = 'No missions';
 
 
     /**
