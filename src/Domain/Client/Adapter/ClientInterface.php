@@ -6,7 +6,7 @@ namespace Ams\Domain\Client\Adapter;
 use Cache\Adapter\Predis\PredisCachePool;
 use Psr\Log\LoggerInterface;
 
-Interface ClientInterface
+interface ClientInterface
 {
     public function request(int $year, int $limit);
 }

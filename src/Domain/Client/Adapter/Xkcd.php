@@ -12,6 +12,7 @@ use stdClass;
 
 /**
  * Class Xkcd
+ *
  * @package Ams\Domain\Client\Adapter
  */
 class Xkcd extends BaseClient implements ClientInterface
@@ -82,9 +83,9 @@ class Xkcd extends BaseClient implements ClientInterface
 
     /**
      * @param $postToSearchFrom
-     * @param int $year
-     * @param int $limit
-     * @param array $cachedPosts
+     * @param int              $year
+     * @param int              $limit
+     * @param array            $cachedPosts
      * @return array
      * @throws InvalidArgumentException
      */
@@ -142,7 +143,8 @@ class Xkcd extends BaseClient implements ClientInterface
         }
 
         if ($limit > $totalPosts) {
-            $this->getCache()->set($this->foundAllPostsFromYearCacheKey($year), count($posts), self::CACHE_TTL_FOUR_HOURS);
+            $totalPostCacheKey = $this->foundAllPostsFromYearCacheKey($year);
+            $this->getCache()->set($totalPostCacheKey, count($posts), self::CACHE_TTL_FOUR_HOURS);
         }
 
         $posts = !empty($cachedPosts) ? array_merge($cachedPosts, $posts) : $posts;
@@ -186,7 +188,7 @@ class Xkcd extends BaseClient implements ClientInterface
     }
 
     /**
-     * @param int $postId
+     * @param int  $postId
      * @param bool $asJson
      * @return ResponseInterface| stdClass
      */
@@ -230,9 +232,12 @@ class Xkcd extends BaseClient implements ClientInterface
      */
     protected function orderPostsByNumber($posts)
     {
-        usort($posts, function ($a, $b) {
-            return $a['number'] <=> $b['number'];
-        });
+        usort(
+            $posts,
+            function ($a, $b) {
+                return $a['number'] <=> $b['number'];
+            }
+        );
 
         return $posts;
     }
@@ -255,5 +260,4 @@ class Xkcd extends BaseClient implements ClientInterface
     {
         return array_slice($cachedPosts, 0, $limit);
     }
-
 }

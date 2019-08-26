@@ -14,6 +14,7 @@ use Slim\Factory\AppFactory;
 
 /**
  * Class BaseClient
+ *
  * @package Ams\Domain\Client\Adapter
  */
 abstract class BaseClient implements ClientInterface
@@ -118,7 +119,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getRequestFactory(): Psr17Factory
     {
-        return $this->requestFactory = $this->requestFactory ?? (New Psr17Factory);
+        return $this->requestFactory = $this->requestFactory ?? (new Psr17Factory);
     }
 
     /**
@@ -127,7 +128,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function getHttpClient(Psr17Factory $psr17Factory): Psr18HttpClient
     {
-        return $this->httpClient = $this->httpClient ?? (New Psr18HttpClient($psr17Factory));
+        return $this->httpClient = $this->httpClient ?? (new Psr18HttpClient($psr17Factory));
     }
 
 
@@ -137,12 +138,12 @@ abstract class BaseClient implements ClientInterface
      */
     public function getHttpMultiClient(Psr17Factory $psr17Factory): Psr18HttpMultiClient
     {
-        return $this->httpMultiClient = $this->httpMultiClient ?? (New Psr18HttpMultiClient($psr17Factory));
+        return $this->httpMultiClient = $this->httpMultiClient ?? (new Psr18HttpMultiClient($psr17Factory));
     }
 
     /**
      * @param string $client
-     * @param int $year
+     * @param int    $year
      * @return string
      */
     protected function assembleCacheKey(string $client, int $year): string
@@ -155,7 +156,7 @@ abstract class BaseClient implements ClientInterface
      */
     public function setDiContainer()
     {
-       return $this->container = $this->container ?? AppFactory::create()->getContainer();
+        return $this->container = $this->container ?? AppFactory::create()->getContainer();
     }
 
     /**
@@ -163,7 +164,6 @@ abstract class BaseClient implements ClientInterface
      */
     public function getDiContainer()
     {
-       return $this->container;
+        return $this->container;
     }
-
 }

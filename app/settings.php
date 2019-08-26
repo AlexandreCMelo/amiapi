@@ -6,7 +6,8 @@ use Monolog\Logger;
 
 return function (ContainerBuilder $containerBuilder) {
 
-    $containerBuilder->addDefinitions([
+    $containerBuilder->addDefinitions(
+        [
         'settings' => [
             'redis' => [
                 'schema' => 'tcp',
@@ -21,12 +22,13 @@ return function (ContainerBuilder $containerBuilder) {
             'productionUri' => getenv('PRODUCTION_HEROKU_URI'),
             'isDevEnviroment' => getenv('ENVIROMENT_DEVELOPMENT') === 'true'? true: false,
             'displayErrorDetails' => getenv('SHOW_ERRORS') === 'true'? true: false
-,
+            ,
             'logger' => [
                 'name' => getenv('LOG_NAME'),
                 'path' => __DIR__ . '/'. getenv('LOG_PATH'),
                 'level' => getenv('LOG_LEVEL'),
             ],
         ],
-    ]);
+        ]
+    );
 };

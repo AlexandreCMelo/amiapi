@@ -14,6 +14,7 @@ class GetTest extends TestCase
     /**
      * Expected clients to test
      * Should be extended
+     *
      * @var array
      */
     public $clients = [
@@ -21,7 +22,7 @@ class GetTest extends TestCase
         Xkcd::PARAM_CLIENT_KEY => Xkcd::class
     ];
 
-    public function testing_spacex_get_endpoint()
+    public function testingSpaceXEndPoint()
     {
 
         $testingConstrains = [
@@ -45,24 +46,30 @@ class GetTest extends TestCase
 
         $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
-
-            $url = vsprintf($urlPattern, [Spacex::PARAM_CLIENT_KEY, $testingConstrain['year'], $testingConstrain['limit']]);
+            $url = vsprintf(
+                $urlPattern,
+                [
+                    Spacex::PARAM_CLIENT_KEY,
+                    $testingConstrain['year'],
+                    $testingConstrain['limit']
+                ]
+            );
 
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
             $this->writeMessage('Testing endpoint ' . $url);
             $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), 'teste');
-
-            $this->writeMessage('Testing result count should be ' .$testingConstrain['limit']. ' is '. count($responseBodyJson->meta->request->data));
+            $dataCount = count($responseBodyJson->meta->request->data);
+            $this->writeMessage('Testing result count should be ' .$testingConstrain['limit']. ' is '. $dataCount);
             $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
         }
     }
 
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Exception
      */
-    public function testing_spacex_get_invalid_endpoint()
+    public function testingSpaceXInvalidEndpoint()
     {
 
         $testingConstrains = [
@@ -82,8 +89,14 @@ class GetTest extends TestCase
 
         $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
-
-            $url = vsprintf($urlPattern, [Spacex::PARAM_CLIENT_KEY, $testingConstrain['year'], $testingConstrain['limit']]);
+            $url = vsprintf(
+                $urlPattern,
+                [
+                    Spacex::PARAM_CLIENT_KEY,
+                    $testingConstrain['year'],
+                    $testingConstrain['limit']
+                ]
+            );
 
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
@@ -93,5 +106,4 @@ class GetTest extends TestCase
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
         }
     }
-
 }

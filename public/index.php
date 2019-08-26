@@ -8,7 +8,7 @@ use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 
-ini_set("error_log",__DIR__ . '/../logs/app.log');
+ini_set("error_log", __DIR__ . '/../logs/app.log');
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,10 +18,10 @@ $dotenv->load();
 $containerBuilder = new ContainerBuilder();
 //$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 
-$settings = require __DIR__ . '/../app/settings.php';
+$settings = include __DIR__ . '/../app/settings.php';
 $settings($containerBuilder);
 
-$dependencies = require __DIR__ . '/../app/dependencies.php';
+$dependencies = include __DIR__ . '/../app/dependencies.php';
 $dependencies($containerBuilder);
 
 $container = $containerBuilder->build();
@@ -30,10 +30,12 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
 
-$routes = require __DIR__ . '/../app/routes.php';
+$routes = include __DIR__ . '/../app/routes.php';
 $routes($app);
 
-/** @var bool $displayErrorDetails */
+/**
+ * @var bool $displayErrorDetails
+*/
 $displayErrorDetails = $container->get('settings')['displayErrorDetails'];
 
 $serverRequestCreator = ServerRequestCreatorFactory::create();
@@ -59,8 +61,11 @@ $responseEmitter->emit($response);
  */
 function dd()
 {
-    array_map(function($x) {
-        var_dump($x);
-    }, func_get_args());
+    array_map(
+        function ($x) {
+            var_dump($x);
+        },
+        func_get_args()
+    );
     die;
 }

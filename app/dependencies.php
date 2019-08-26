@@ -9,7 +9,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 return function (ContainerBuilder $containerBuilder) {
-    $containerBuilder->addDefinitions([
+    $containerBuilder->addDefinitions(
+        [
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get('settings');
 
@@ -24,9 +25,11 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
-    ]);
+        ]
+    );
 
-    $containerBuilder->addDefinitions([
+    $containerBuilder->addDefinitions(
+        [
         Cache\Adapter\Predis\PredisCachePool::class => function (ContainerInterface $c) {
 
             $settings = $c->get('settings');
@@ -42,6 +45,6 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $pool;
         },
-    ]);
-
+        ]
+    );
 };

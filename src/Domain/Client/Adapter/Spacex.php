@@ -9,7 +9,7 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Spacex Extends BaseClient
+class Spacex extends BaseClient
 {
 
     const PARAM_CLIENT_KEY = 'space';
@@ -74,7 +74,7 @@ class Spacex Extends BaseClient
     {
         $missions = [];
         foreach ($launches as $launch) {
-            $date = (New DateTime($launch->launch_date_utc))->format(self::DATE_FORMAT);
+            $date = (new DateTime($launch->launch_date_utc))->format(self::DATE_FORMAT);
             $missions[$launch->launch_year][] = $this->assembleResponseBody(
                 $launch->flight_number,
                 $date,
@@ -104,5 +104,4 @@ class Spacex Extends BaseClient
     {
         $this->getCache()->set(self::PARAM_CLIENT_KEY, $missions, self::CACHE_TTL_FOUR_HOURS);
     }
-
 }

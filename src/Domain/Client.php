@@ -13,6 +13,7 @@ class Client
     /**
      * Expected clients
      * Could be easily extended
+     *
      * @var array
      */
     private $clients = [
@@ -23,7 +24,7 @@ class Client
     /**
      * @param string $source
      * @param $year
-     * @param int $limit
+     * @param int    $limit
      * @throws HttpNotFoundException
      */
     public function request(string $source, int $year, int $limit)
@@ -50,7 +51,7 @@ class Client
     public function getClientAdapter(string $source): ClientInterface
     {
         $this->validateClient($source);
-        $client = New $this->clients[$source];
+        $client = new $this->clients[$source];
 
         return $client;
     }

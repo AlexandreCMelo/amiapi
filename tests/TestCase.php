@@ -15,7 +15,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Factory\AppFactory;
 
-
 class TestCase extends PHPUnit_TestCase
 {
 
@@ -48,11 +47,11 @@ class TestCase extends PHPUnit_TestCase
         // Container intentionally not compiled for tests.
 
         // Set up settings
-        $settings = require __DIR__ . '/../app/settings.php';
+        $settings = include __DIR__ . '/../app/settings.php';
         $settings($containerBuilder);
 
         // Set up dependencies
-        $dependencies = require __DIR__ . '/../app/dependencies.php';
+        $dependencies = include __DIR__ . '/../app/dependencies.php';
         $dependencies($containerBuilder);
 
         // Build PHP-DI Container instance
@@ -63,7 +62,7 @@ class TestCase extends PHPUnit_TestCase
         $app = AppFactory::create();
 
         // Register routes
-        $routes = require __DIR__ . '/../app/routes.php';
+        $routes = include __DIR__ . '/../app/routes.php';
         $routes($app);
 
         return $app;
@@ -78,8 +77,7 @@ class TestCase extends PHPUnit_TestCase
     protected function createRequest(
         string $method,
         string $path
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $requestFactory = $this->getRequestFactory();
 
         $request = $requestFactory->createRequest(
@@ -100,7 +98,7 @@ class TestCase extends PHPUnit_TestCase
      */
     public function getHttpClient(Psr17Factory $psr17Factory): Psr18HttpClient
     {
-        return $this->httpClient ?? (New Psr18HttpClient($psr17Factory));
+        return $this->httpClient ?? (new Psr18HttpClient($psr17Factory));
     }
 
     /**
@@ -108,7 +106,7 @@ class TestCase extends PHPUnit_TestCase
      */
     public function getRequestFactory(): Psr17Factory
     {
-        return $this->requestFactory ?? (New Psr17Factory);
+        return $this->requestFactory ?? (new Psr17Factory);
     }
 
     /**
@@ -117,7 +115,7 @@ class TestCase extends PHPUnit_TestCase
      */
     public function getHttpMultiClient(Psr17Factory $psr17Factory): Psr18HttpMultiClient
     {
-        return $this->httpMultiClient ?? (New Psr18HttpMultiClient($psr17Factory));
+        return $this->httpMultiClient ?? (new Psr18HttpMultiClient($psr17Factory));
     }
 
     /**
@@ -125,14 +123,15 @@ class TestCase extends PHPUnit_TestCase
      */
     public function writeMessage(?string $message)
     {
-        fwrite(STDERR, print_r($message.PHP_EOL, TRUE));
+        fwrite(STDERR, print_r($message.PHP_EOL, true));
     }
 
     /**
      * @return string
      * @throws Exception
      */
-    function url(){
+    public function url()
+    {
 
         $settings = $this->getAppInstance()->getContainer()->get('settings');
         $url = $settings['isDevEnviroment'] ? "http://" .$_SERVER['HTTP_HOST'] : $settings['productionUri'];

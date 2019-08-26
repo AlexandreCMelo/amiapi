@@ -50,6 +50,7 @@ abstract class Action
 
     /**
      * Action constructor.
+     *
      * @param LoggerInterface $logger
      * @param PredisCachePool $cache
      */
@@ -60,9 +61,9 @@ abstract class Action
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
-     * @param array $args
+     * @param array    $args
      * @return Response
      * @throws HttpNotFoundException
      * @throws HttpBadRequestException
@@ -131,6 +132,4 @@ abstract class Action
 
         return $this->domain;
     }
-
-
 }

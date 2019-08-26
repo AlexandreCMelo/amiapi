@@ -22,6 +22,7 @@ class Get extends Action
 
     /**
      * ClientAction constructor.
+     *
      * @param LoggerInterface $logger
      * @param PredisCachePool $cachePool
      */
@@ -32,26 +33,27 @@ class Get extends Action
 
     /**
      * {@inheritdoc}
+     *
      * @throws HttpNotFoundException
      */
     protected function action(): Response
     {
         $year = $this->resolveArg('year');
         if (!$this->validateYear($year)) {
-            throw New HttpBadRequestException($this->request, 'Please inform an valid year');
+            throw new HttpBadRequestException($this->request, 'Please inform an valid year');
         }
 
         $limit = (int)$this->resolveArg('limit');
-        if($limit > self::MAX_LIMIT) {
-            throw New HttpBadRequestException($this->request, 'Limit must be under 9999');
+        if ($limit > self::MAX_LIMIT) {
+            throw new HttpBadRequestException($this->request, 'Limit must be under 9999');
         }
 
         $sourceId = $this->resolveArg('client');
 
         $response = $this->getClientDomain()->request($sourceId, (int)$year, $limit);
 
-        if(!$response){
-            throw New HttpNotFoundException($this->request);
+        if (!$response) {
+            throw new HttpNotFoundException($this->request);
         }
 
         return $this->respond($response);
