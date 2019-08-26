@@ -6,8 +6,11 @@ namespace Tests\Application\Actions\Client;
 use Ams\Domain\Client\Adapter\Spacex;
 use Ams\Domain\Client\Adapter\Xkcd;
 use Cache\Adapter\Predis\PredisCachePool;
+use DateInterval;
+use DateTime;
 use DI\Container;
 use Exception;
+use Psr\Http\Client\ClientExceptionInterface;
 use Tests\TestCase;
 
 class GetTest extends TestCase
@@ -59,10 +62,8 @@ class GetTest extends TestCase
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
-            $this->writeMessage('Testing endpoint ' . $url);
             $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), $url);
             $dataCount = count($responseBodyJson->meta->request->data);
-            $this->writeMessage('Testing result count should be ' . $testingConstrain['limit'] . ' is ' . $dataCount);
             $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
         }
     }
@@ -101,8 +102,6 @@ class GetTest extends TestCase
 
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
-
-            $this->writeMessage('Testing invalid endpoint ' . $url . ' should return 404');
             $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
             $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
         }
@@ -144,16 +143,14 @@ class GetTest extends TestCase
             $response = $this->createRequest('GET', $url);
             $responseBodyJson = json_decode($response->getBody()->getContents());
 
-            $this->writeMessage('Testing endpoint ' . $url);
             $this->assertEquals(self::HTTP_SUCCESS_CODE, $response->getStatusCode(), $url);
             $dataCount = count($responseBodyJson->meta->request->data);
-            $this->writeMessage('Testing result count should be ' . $testingConstrain['limit'] . ' is ' . $dataCount);
             $this->assertCount($testingConstrain['limit'], $responseBodyJson->meta->request->data);
         }
     }
 
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testingInvalidDomains()
     {
@@ -179,22 +176,21 @@ class GetTest extends TestCase
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
 
-        $this->writeMessage('Testing invalid client '. $url);
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
 
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testingNonExistentYearSpaceX()
     {
-        $nextYear = new \DateTime();
-        $nextYear->add(new \DateInterval('P1Y'));
+        $nextYear = new DateTime();
+        $nextYear->add(new DateInterval('P1Y'));
 
         $testingConstrains = [
             'client' => 'space',
-            'year' =>  $nextYear->format('Y'),
+            'year' => $nextYear->format('Y'),
             'limit' => '10',
         ];
 
@@ -211,23 +207,22 @@ class GetTest extends TestCase
 
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
-        $this->writeMessage('Testing year with spacex '. $url);
         $this->assertEquals(self::HTTP_NOTE_VALID_CODE, $response->getStatusCode());
         $this->assertContains('BAD_REQUEST', $responseBodyJson->error->type);
 
     }
 
     /**
-     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws ClientExceptionInterface
      */
     public function testingNonExistentYearXkcd()
     {
-        $nextYear = new \DateTime();
-        $nextYear->add(new \DateInterval('P1Y'));
+        $nextYear = new DateTime();
+        $nextYear->add(new DateInterval('P1Y'));
 
         $testingConstrains = [
-            'client' => 'space',
-            'year' =>  $nextYear->format('Y'),
+            'client' => 'comics',
+            'year' => $nextYear->format('Y'),
             'limit' => '10',
         ];
 
@@ -242,10 +237,8 @@ class GetTest extends TestCase
             ]
         );
 
-
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
-        $this->writeMessage('Testing year with xkcd '. $url);
         $this->assertEquals(self::HTTP_NOTE_VALID_CODE, $response->getStatusCode());
         $this->assertContains('BAD_REQUEST', $responseBodyJson->error->type);
 
