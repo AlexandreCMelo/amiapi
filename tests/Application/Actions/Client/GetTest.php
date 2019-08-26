@@ -180,7 +180,7 @@ class GetTest extends TestCase
         $responseBodyJson = json_decode($response->getBody()->getContents());
 
         $this->writeMessage('Testing invalid client '. $url);
-        $this->assertEquals(self::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals(500, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
 }
