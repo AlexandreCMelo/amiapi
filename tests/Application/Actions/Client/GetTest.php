@@ -43,7 +43,6 @@ class GetTest extends TestCase
             ],
         ];
 
-        dd($this->url());
         $urlPattern = $this->url().'/api/client/%s/year/%d/limit/%d';
         foreach ($testingConstrains as $testingConstrain) {
 
