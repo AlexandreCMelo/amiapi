@@ -176,7 +176,7 @@ class GetTest extends TestCase
         $response = $this->createRequest('GET', $url);
         $responseBodyJson = json_decode($response->getBody()->getContents());
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals(500, $response->getStatusCode());
         $this->assertContains('RESOURCE_NOT_FOUND', $responseBodyJson->error->type);
     }
 
